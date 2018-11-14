@@ -15,8 +15,9 @@ def main():
     while 1:
         sprite.draw();
 
-        #tk.update_idletasks();
+        tk.update_idletasks();
         tk.update()
-        time.sleep(0.01);
+        #fps
+        time.sleep(0.10);
                         
 main();
