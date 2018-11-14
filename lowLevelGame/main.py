@@ -11,13 +11,15 @@ def main():
     tk.update();
 
     sprite = Sprite(canvas);
-
-    while 1:
+    keepGoing = True;
+    while keepGoing:
         sprite.draw();
 
         tk.update_idletasks();
-        tk.update()
+        tk.update();
         #fps
         time.sleep(0.10);
+        if(sprite.win()):
+            keepGoing = False;
                         
 main();

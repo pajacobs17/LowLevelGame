@@ -1,7 +1,8 @@
 from tkinter import *;
 
 MAX_ACCEL = 5;
-DRAG = 0.99;
+#0.01 means that 99% of momentum is maintained each frame
+DRAG = 0.03;
 
 class Sprite:
     def __init__(self, canvas):
@@ -13,64 +14,59 @@ class Sprite:
         self.y = 0;
         self.dx = 0;
         self.dy = 0;
-        print(self.canvas.winfo_height());
         #both direction of movement and the rotation angle of the image
         self.moveAngle = 0;
-        #self.canvas_width = canvas.winfo_width();
-
-        canvas.move(self.id, 200, 300);
-
+        
         canvas.bind_all('<KeyPress-Left>', self.move_left);
         canvas.bind_all('<KeyPress-Right>', self.move_right);
         canvas.bind_all('<KeyPress-Up>', self.move_up);
         canvas.bind_all('<KeyPress-Down>', self.move_down);
-
-        #drag for when keys are released
-        #canvas.bind_all('<KeyRelease-Left>', self.release_left);
-        #canvas.bind_all('<KeyRelease-Right>', self.release_right);
-        #canvas.bind_all('<KeyRelease-Up>', self.release_up);
-        #canvas.bind_all('<KeyRelease-Down>', self.release_down);
-    """
-    def checkBounds(self):
+    
+    def checkBounds(self, pos):
         #check bottom bounds
-        if(self.x <= 0):
-            pass;
-            #self.canvas.move(self.id, self.canvas.winfo_width()/2, self.y);
-            #self.y = self.canvas.winfo_width()/2;
-            #self.dy = -self.dy;
-        if(self.x >= self.canvas.winfo_width()):
-            pass;
-            #self.canvas.move(self.id, self.canvas.winfo_width()/2, self.y);
-            #self.x = self.canvas.winfo_width()/2;
-            #self.dy = -self.dy;
+        if(pos[0] < 0):
+            #******add later to make the full image stay on the screen using screen size
+            self.dx = -self.dx;
+            self.x = 0;
+        
+        if(pos[0] > self.canvas.winfo_width()):
+            self.dx = -self.dx;
+            self.x = self.canvas.winfo_width();
 
-        self.canvas.update();
-    """
+        if(pos[1] < 0):
+            #******add later to make the full image stay on the screen using screen size
+            self.dy = -self.dy;
+            self.y = 0;
+        
+        if(pos[1] > self.canvas.winfo_height()):
+            self.dy = -self.dy;
+            self.y = self.canvas.winfo_height() - 1;
+
+    
+    def win(self):
+        pass;
     
     def draw(self):
-        self.checkBounds();
+        #to introduce drag into movement when the key is not being pressed
         self.dy *= (1 - DRAG);
         self.dx *= (1 - DRAG);
-        self.canvas.move(self.id, self.x, self.y);
         pos = self.canvas.coords(self.id);
 
+        self.checkBounds(pos);
+        self.canvas.move(self.id, self.dx, self.dy);
+
     def move_left(self, event):
-        #to cap acceleration
-        if(self.dx > - MAX_ACCEL):
-            self.dx -= 2;
+        self.dx -= 2;
         self.x += self.dx;
 
     def move_right(self, event):
-        if(self.dx < MAX_ACCEL):
-            self.dx += 2;
+        self.dx += 2;
         self.x += self.dx;
 
     def move_up(self, event):
-        if(self.dy < MAX_ACCEL):
-            self.dy -= 2;
+        self.dy -= 2;
         self.y += self.dy;
 
     def move_down(self, event):
-        if(self.dy > - MAX_ACCEL):
-            self.dy += 2;
+        self.dy += 2;
         self.y += self.dy;
