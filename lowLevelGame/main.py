@@ -10,16 +10,18 @@ def main():
     canvas.pack();
     tk.update();
 
-    sprite = Sprite(canvas);
+    sprite1 = Sprite(canvas, 1, 1, [300, 300]);
+    sprite2 = Sprite(canvas, 1, 1, [10, 10]);
     keepGoing = True;
     while keepGoing:
-        sprite.draw();
+        if(sprite1.collidesWith(sprite2)):
+            keepGoing = false;
+        sprite1.draw();
+        sprite2.draw();
 
         tk.update_idletasks();
         tk.update();
         #fps
         time.sleep(0.10);
-        if(sprite.win()):
-            keepGoing = False;
                         
 main();

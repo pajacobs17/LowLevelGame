@@ -5,13 +5,13 @@ MAX_ACCEL = 5;
 DRAG = 0.03;
 
 class Sprite:
-    def __init__(self, canvas):
+    #no need for x and y since the canvas element already has them
+    def __init__(self, canvas, heightMult, widthMult, pos = [100, 100]):
         self.canvas = canvas;
         self.photo = PhotoImage(file="test.gif");
-        self.id = canvas.create_image(245, 100, image=self.photo);
+        self.photo = self.photo.zoom(widthMult, heightMult);
+        self.id = canvas.create_image(pos[0], pos[1], image=self.photo);
 
-        self.x = 0;
-        self.y = 0;
         self.dx = 0;
         self.dy = 0;
         #both direction of movement and the rotation angle of the image
@@ -21,27 +21,33 @@ class Sprite:
         canvas.bind_all('<KeyPress-Right>', self.move_right);
         canvas.bind_all('<KeyPress-Up>', self.move_up);
         canvas.bind_all('<KeyPress-Down>', self.move_down);
-    
+
+    def collidesWith(self, otherSprite):
+        pass;
+        
     def checkBounds(self, pos):
         #check bottom bounds
         if(pos[0] < 0):
             #******add later to make the full image stay on the screen using screen size
             self.dx = -self.dx;
-            self.x = 0;
         
         if(pos[0] > self.canvas.winfo_width()):
             self.dx = -self.dx;
-            self.x = self.canvas.winfo_width();
+
 
         if(pos[1] < 0):
             #******add later to make the full image stay on the screen using screen size
             self.dy = -self.dy;
-            self.y = 0;
+
         
         if(pos[1] > self.canvas.winfo_height()):
             self.dy = -self.dy;
-            self.y = self.canvas.winfo_height() - 1;
 
+    def getX(self):
+        return self.canvas.coords(self.id)[0];
+
+    def getY(self):
+        return self.canvas.coords(self.id)[1];
     
     def win(self):
         pass;
@@ -57,16 +63,12 @@ class Sprite:
 
     def move_left(self, event):
         self.dx -= 2;
-        self.x += self.dx;
 
     def move_right(self, event):
         self.dx += 2;
-        self.x += self.dx;
 
     def move_up(self, event):
         self.dy -= 2;
-        self.y += self.dy;
 
     def move_down(self, event):
         self.dy += 2;
-        self.y += self.dy;
