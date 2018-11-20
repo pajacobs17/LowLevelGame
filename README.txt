@@ -1,3 +1,6 @@
+Some documentation in FinitieStateMachine.jpg, some in here, some in comments throughout code
+
+
 Game Loop with a specified frame rate
 	- this is handled in the keepGoing loop in main utilizing the time.sleep() function
 	
